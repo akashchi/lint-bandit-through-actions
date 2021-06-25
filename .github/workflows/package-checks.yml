@@ -8,25 +8,18 @@ jobs:
   archive-build-artifacts:
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [ 3.9 ]
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.9'
       - name: Setup Dependencies
         run: |
           python -m pip install bandit pylint
       - name: Run lint
         run: |
-          ls -la
-          pwd
           pylint sample_python_package
 
       - name: Create a temporary artifact folder
@@ -34,8 +27,6 @@ jobs:
 
       - name: Run Bandit
         run: |
-          ls -la
-          pwd
           bandit -r sample_python_package -o artifacts/bandit_check.txt -f txt
 
       - name: Upload Bandit artifacts
